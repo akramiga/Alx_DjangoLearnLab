@@ -1,4 +1,3 @@
-"welcome to django"
 # My Project
 
 ## Introduction
@@ -6,4 +5,3 @@ This is a sample project to learn Markdown formatting.
 
 ## Features
 - Easy to use
-- Fast and efficient
