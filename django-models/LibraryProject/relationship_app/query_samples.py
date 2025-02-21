@@ -8,6 +8,11 @@ def list_books(library_name):
     return Library.objects.get(name=library_name).books.all()
 
 def books_by_author(author_name):
-    
     author = Author.objects.get(name=author_name)  
     return Book.objects.filter(author=author)  
+
+def get_librarian(library_name):
+
+    library = Library.objects.get(name=library_name)  
+    return library.librarian.name  
+        
