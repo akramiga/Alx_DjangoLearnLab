@@ -10,7 +10,8 @@ def list_books(request):
     book_list = ""
     for book in books:
         book_list += f"{book.title} {book.author}"
-    return HttpResponse(book_list)
+    return render(request, "relationship_app/list_books.html", {"books": books})    
+   # return HttpResponse(book_list)
 # class basewd view
 class LibraryView(ListView):
     model = Library 
