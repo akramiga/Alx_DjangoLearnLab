@@ -10,11 +10,11 @@ def list_books(request):
     book_list = ""
     for book in books:
         book_list += f"{book.title} {book.author}"
-        return HttpResponse(book_list)
+    return HttpResponse(book_list)
 # class basewd view
 class LibraryView(ListView):
     model = Library 
-    template_name = 'library.html'
+    template_name = 'library_detail.html'
     context_object_name = 'libraries'
     def get_queryset(self):
         return self.model.objects.all()   
