@@ -55,9 +55,11 @@ You will need to create views for user login, logout, and registration.
 class LoginView(LoginView):
     template_name = 'users/login.html'
 
-def logout_view(request):
-    logout(request)
-    return render(request, 'users/logout.html')
+# def logout_view(request):
+#     logout(request)
+#     return render(request, 'users/logout.html')
+class LogoutView(LogoutView):
+    template_name = 'users/logout.html'
 
 def register_view(request):
     if request.method == 'POST':
