@@ -4,7 +4,7 @@ from .models import Library, Book
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
-from django.contrib.auth.forms import UserChangeForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.urls import reverse
 
