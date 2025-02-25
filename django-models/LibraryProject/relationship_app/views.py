@@ -70,4 +70,4 @@ def register_view(request):
             return redirect('index')  # Redirect to homepage after successful signup
     else:
         form = UserCreationForm()
-    return render(request, 'users/register.html', {'form': form})
+    return render(request, 'relationship_app/register.html', {'form': form})
