@@ -7,7 +7,7 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.urls import reverse
-
+from django.contrib.auth.views import LoginView, LogoutView
 
 #function based view
 def list_books(request):
@@ -42,16 +42,18 @@ handling user authentication.
 You will need to create views for user login, logout, and registration.
 
 """    
-def login_view(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(data = request.POST)
-        if form .is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('homme')
-    else:
-        form = AuthenticationForm()   
-    return render(request,'relationship_app/login.html', {'form': form} ) 
+# def login_view(request):
+#     if request.method == 'POST':
+#         form = AuthenticationForm(data = request.POST)
+#         if form .is_valid():
+#             user = form.get_user()
+#             login(request, user)
+#             return redirect('homme')
+#     else:
+#         form = AuthenticationForm()   
+#     return render(request,'relationship_app/login.html', {'form': form} ) 
+class LoginView(LoginView):
+    template_name = 'users/login.html'
 
 def logout_view(request):
     logout(request)
