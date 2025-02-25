@@ -1,10 +1,14 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render,redirect
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import Library, Book
 from django.views import View
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView
-# Create your views here.
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth import  login,  logout
+from django.urls import reverse
+
+
 #function based view
 def list_books(request):
     books = Book.objects.all()
@@ -30,3 +34,36 @@ class LibraryDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context["books"] = self.object.book_set.all()  # Fetch all books in this library
         return context
+    
+"""
+Setting up User Authentication Views:
+Utilize Django’s built-in views and forms for
+handling user authentication. 
+You will need to create views for user login, logout, and registration.
+
+"""    
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(data = request.POST)
+        if form .is_valid():
+            user = form.get_user()
+            login(request, user)
+            return redirect('homme')
+    else:
+        form = AuthenticationForm()   
+    return render(request,'relationship_app/login.html', {'form': form} ) 
+
+def logout_view(request):
+    logout(request)
+    return render(request, 'users/logout.html')
+
+def register_view(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)  # Log the user in immediately after registration
+            return redirect('index')  # Redirect to homepage after successful signup
+    else:
+        form = UserCreationForm()
+    return render(request, 'users/register.html', {'form': form})
