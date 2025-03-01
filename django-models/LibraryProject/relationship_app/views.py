@@ -8,6 +8,9 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.urls import reverse
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.decorators import user_passes_test
+from .decorators import is_admin, is_librarian, is_member
+
 
 #function based view
 def list_books(request):
@@ -71,3 +74,15 @@ def register_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
+
+
+#our role based views
+@user_passes_test(is_admin)
+def admin_view(request):
+    return HttpResponse('welcome admin')
+@user_passes_test(is_librarian)
+def librarian_view(request):
+    return HttpResponse('wecome librarian')
+@user_passes_test(is_member)
+def member_view(request):
+    return HttpResponse('welcome member')
