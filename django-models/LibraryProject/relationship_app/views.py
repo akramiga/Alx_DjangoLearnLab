@@ -8,9 +8,10 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.urls import reverse
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.decorators import user_passes_test, permission_required
+from django.contrib.auth.decorators import permission_required,user_passes_test 
 from .decorators import is_admin, is_librarian, is_member
 from django import forms
+
 
 
 #function based view
