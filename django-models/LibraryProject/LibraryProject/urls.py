@@ -20,9 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('relationship_app.urls')),
-    path('users/',include('relationship_app.urls')),
-    path('admin_dashboard/',include('relationship_app.urls')),
-    path('librarian_dashboard/',include('relationship_app.urls')),
-    path('member_dashboard/', include('relationship_app.urls'))
     
 ]
