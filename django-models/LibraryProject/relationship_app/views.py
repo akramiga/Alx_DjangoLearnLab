@@ -79,10 +79,13 @@ def register_view(request):
 #our role based views
 @user_passes_test(is_admin)
 def admin_view(request):
-    return HttpResponse('welcome admin')
+    return render(request, 'relationship_app/admin_dashboard.html')
+    #return HttpResponse('welcome admin')
 @user_passes_test(is_librarian)
 def librarian_view(request):
-    return HttpResponse('wecome librarian')
+    return render(request, 'relationship_app/librarian_dashboard.html')
+    #return HttpResponse('wecome librarian')
 @user_passes_test(is_member)
 def member_view(request):
-    return HttpResponse('welcome member')
+    return render(request, 'relationship_app/member_dashboard.html')
+    #return HttpResponse('welcome member')

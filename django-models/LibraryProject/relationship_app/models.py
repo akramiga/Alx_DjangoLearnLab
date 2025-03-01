@@ -39,7 +39,7 @@ class UserProfile(models.Model):
     def __str__(self):
         return f"{self.user.username} ({self.role})"
 
-#signal to create profilr automatically
+#signal to create profile automatically
 @receiver(post_save, sender = User)
 def create_user(sender, instance, created, **kwargs):
     if created:
