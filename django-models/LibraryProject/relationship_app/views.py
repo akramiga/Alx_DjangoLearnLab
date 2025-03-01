@@ -8,10 +8,10 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.urls import reverse
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.decorators import permission_required,user_passes_test 
+from django.contrib.auth.decorators import permission_required,user_passes_test
 from .decorators import is_admin, is_librarian, is_member
 from django import forms
-
+from.models import UserProfile
 
 
 #function based view
@@ -79,6 +79,18 @@ def register_view(request):
 
 
 #our role based views
+# Check if the user is an Admin
+def is_admin(user):
+    return user.userprofile.role == UserProfile.ADMIN
+
+# Check if the user is a Librarian
+def is_librarian(user):
+    return user.userprofile.role == UserProfile.LIBRARIAN
+
+def is_member(user):
+    return user.userprofile.role == UserProfile.MEMBER
+
+
 @user_passes_test(is_admin)
 def admin_view(request):
     return render(request, 'relationship_app/admin_dashboard.html')
