@@ -108,7 +108,7 @@ def member_view(request):
 class BookForm(forms.ModelForm):
     class Meta:
         model = Book
-        fields = ['title', 'author', 'description']
+        fields = ['title', 'author']
 
 # View to add a new book
 @permission_required('relationship_app.can_add_book', raise_exception=True)
