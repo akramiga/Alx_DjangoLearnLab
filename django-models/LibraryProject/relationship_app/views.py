@@ -81,7 +81,8 @@ def register_view(request):
 #our role based views
 # Check if the user is an Admin
 def is_admin(user):
-    return user.userprofile.role == UserProfile.ADMIN
+    return hasattr(user, 'userprofile') and user.userprofile.role == UserProfile.ADMIN
+   # return user.userprofile.role == UserProfile.ADMIN
 
 # Check if the user is a Librarian
 def is_librarian(user):
