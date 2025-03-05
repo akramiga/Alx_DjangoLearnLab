@@ -1,6 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User, AbstractUser, BaseUserManager
-from django.contrib.auth.models import Permission, Group
+from django.contrib.auth.models import AbstractUser, BaseUserManager, Permission
 # Create your models here.
 class Book(models.Model):
     title = models.CharField(max_length=200)
@@ -19,8 +18,9 @@ class Book(models.Model):
     
 #creating acustom user model and adding custom fields
 class CustomUser(AbstractUser):
+    email = models.EmailField(unique=True)
     date_of_birth = models.DateField(unique= False)
-    profile_photo = models.ImageField(upload_to='images/', null= True)
+   # profile_photo = models.ImageField(upload_to='images/', null= True)
     def __str__(self):
         return self.username
 #custom user manager
