@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, Permission, Group
 from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.decorators import permission_required
+from django.shortcuts import render
+
 #Create your models here.
 
 
@@ -36,6 +38,11 @@ can_delete = Permission.objects.get(codename='can_delete', content_type=content_
 editors_group.permissions.add(can_create, can_edit, can_delete)
 viewers_group.permissions.add(can_view)
 admins_group.permissions.add(can_view, can_create, can_edit, can_delete)   
+
+def book_list(request):
+    books = Book.objects.all()
+    return render(request, 'book_list.html', {'books': books})
+
 
 @permission_required('bookshelf.can_create', raise_exception=True)
 def create(request):
