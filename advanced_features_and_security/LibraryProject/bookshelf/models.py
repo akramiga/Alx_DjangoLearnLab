@@ -42,6 +42,8 @@ admins_group.permissions.add(can_view, can_create, can_edit, can_delete)
 def book_list(request):
     books = Book.objects.all()
     return render(request, 'book_list.html', {'books': books})
+@permission_required("book_list", raise_exception= 'books')
+
 
 
 @permission_required('bookshelf.can_create', raise_exception=True)
