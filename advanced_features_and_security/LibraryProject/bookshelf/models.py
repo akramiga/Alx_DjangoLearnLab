@@ -1,6 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser, BaseUserManager, Permission
-# Create your models here.
+from django.contrib.auth.models import AbstractUser, BaseUserManager, Permission, Group
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.decorators import permission_required
+#Create your models here.
+
+
+
 class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=100)
@@ -15,6 +20,37 @@ class Book(models.Model):
     
     def __str__(self):
         return self.title
+# Create groups
+
+editors_group, created = Group.objects.get_or_create(name='Editors')
+viewers_group, created = Group.objects.get_or_create(name='Viewers')
+admins_group, created = Group.objects.get_or_create(name='Admins')
+
+# Get permissions
+content_type = ContentType.objects.get_for_model(Book)
+can_view = Permission.objects.get(codename='can_view', content_type=content_type)
+can_create = Permission.objects.get(codename='can_create', content_type=content_type)
+can_edit = Permission.objects.get(codename='can_edit', content_type=content_type)
+can_delete = Permission.objects.get(codename='can_delete', content_type=content_type)
+    # Assign permissions to the groups
+editors_group.permissions.add(can_create, can_edit, can_delete)
+viewers_group.permissions.add(can_view)
+admins_group.permissions.add(can_view, can_create, can_edit, can_delete)   
+
+@permission_required('bookshelf.can_create', raise_exception=True)
+def create(request):
+    pass
+@permission_required('bookshelf.can_view', raise_exception=True)
+def view(request):
+    pass
+@permission_required('bookshelf.can_edit', raise_exception=True)
+def edit(request):
+    pass
+@permission_required('bookshelf.can_delete', raise_exception=True)
+def delete(request):
+    pass
+
+    
     
 #creating acustom user model and adding custom fields
 class CustomUser(AbstractUser):
