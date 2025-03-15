@@ -1,9 +1,6 @@
 from django.db import models
 
 # Create your models here.
-
-
-
 '''
 author model to store details about the authors of the books,
  the name of the author, limited to 300 characters
