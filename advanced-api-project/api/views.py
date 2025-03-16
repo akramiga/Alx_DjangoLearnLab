@@ -5,6 +5,7 @@ from .models import Book
 from .serializers import BookSerializer
 from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from django_filters import rest_framework
 
 # Create your views here.
 class BookListView(generics.RetrieveAPIView):
