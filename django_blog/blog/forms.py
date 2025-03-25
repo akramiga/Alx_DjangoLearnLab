@@ -3,7 +3,7 @@ from .models import Comment
 
 class CommentForm(forms.ModelForm):
     class Meta:
-        model =Comment
+        model = Comment
         fields=['content']
     def clean_content(self):  # Custom validation for the 'content' field
         content = self.cleaned_data.get('content')
