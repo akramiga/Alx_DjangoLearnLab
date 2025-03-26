@@ -4,6 +4,7 @@ from .views import PostViewSet, CommentViewSet
 router = DefaultRouter()
 router.register( 'my-models', PostViewSet,CommentViewSet)
 urlpatterns=[
-    path('post/', include(router.urls))
+    path('api/', include(router.urls))
+   
   
 ]
