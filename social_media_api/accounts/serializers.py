@@ -2,7 +2,7 @@ from rest_framework import serializers
 from.models import CustomUser
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import get_user_model
-from django.contrib.auth.hashers import make_password  # Import hashers
+
 
 class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -24,3 +24,5 @@ class RegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField(write_only=True)
+
+    
