@@ -1,23 +1,62 @@
-from django.shortcuts import render
-from rest_framework.views import APIView
-from rest_framework import generics 
-from rest_framework import viewsets, status
+from django.conf import settings
+from rest_framework import serializers, viewsets, status, generics
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny,IsAuthenticated
-from django.contrib.auth import authenticate
-from .models import CustomUser
-from .serializers import  CustomUserSerializer,RegistrationSerializer,LoginSerializer,TokenSerializer
-from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.hashers import make_password
+from rest_framework.views import APIView
+
+# Get the user model
+User = get_user_model()
 
 
-# Create your views here.
+# Serializers
+class CustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User  
+        fields = '__all__'
+
+
+class RegistrationSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+    password2 = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+
+    class Meta:
+        model = User  # Use get_user_model()
+        fields = ('username', 'email', 'first_name', 'last_name', 'password', 'password2', 'bio', 'profile_picture')
+        
+
+    def validate(self, data):
+        if data['password'] != data['password2']:
+            raise serializers.ValidationError("Passwords do not match.")
+        return data
+
+    def create(self, validated_data):
+        validated_data['password'] = make_password(validated_data.pop('password'))
+        validated_data.pop('password2')
+        user = User.objects.create(**validated_data)  # Use get_user_model()
+        Token.objects.create(user=user)
+        return user
+
+
+class LoginSerializer(serializers.Serializer):
+    username = serializers.CharField(required=True)
+    password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
+
+
+class TokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Token
+        fields = ('key',)
+
+
+# Views (APIView and Generics)
 class RegistrationAPIView(generics.CreateAPIView):
     """
     Registers a new user.
     """
-    queryset = CustomUser.objects.all()
+    queryset = User.objects.all() # Use get_user_model()
     serializer_class = RegistrationSerializer
     permission_classes = [AllowAny]
 
@@ -25,9 +64,7 @@ class RegistrationAPIView(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
-        #token, _ = Token.objects.get_or_create(user=user) #token created in serializer
         return Response({'message': 'User created successfully.'}, status=status.HTTP_201_CREATED)
-
 
 
 class LoginAPIView(APIView):
@@ -66,9 +103,10 @@ class LogoutAPIView(APIView):
             except AttributeError:
                 return Response({'error': 'Token not found for this user.'}, status=status.HTTP_400_BAD_REQUEST)
         else:
-             return Response({'error': 'Not authenticated.'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'Not authenticated.'}, status=status.HTTP_401_UNAUTHORIZED)
 
-class ProfileAPIView(APIView):
+
+class UserDataAPIView(APIView):
     """
     Retrieves data for the authenticated user.
     """
